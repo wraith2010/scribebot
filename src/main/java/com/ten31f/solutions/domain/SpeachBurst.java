@@ -14,7 +14,7 @@ import javax.sound.sampled.AudioSystem;
 public class SpeachBurst {
 
 	// how long before burst closes
-	private static long OPEN_TIME = 1000l;
+	private static final long OPEN_TIME = 1000l;
 
 	private String userName = null;
 

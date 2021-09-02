@@ -1,6 +1,5 @@
 package com.ten31f.solutions;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -10,8 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ten31f.solutions.handlers.Transcriber;
-import com.ten31f.solutions.listners.TranscriberCommand;
 import com.ten31f.solutions.listners.PingPong;
+import com.ten31f.solutions.listners.TranscriberCommand;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -23,7 +22,7 @@ public class App extends ListenerAdapter {
 
 	private static final Logger LOGGER = LogManager.getLogger(App.class);
 
-	public static void main(String[] args) throws LoginException, InterruptedException, IOException {
+	public static void main(String[] args) throws LoginException, InterruptedException {
 
 		ExecutorService executorService = Executors.newCachedThreadPool();
 

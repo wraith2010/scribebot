@@ -2,7 +2,7 @@
 
 # Scribe Bot
 
-Scribe Bot is a discord bot designed to transcribe the audio conversation of discord users in a given channel. The goal is to use the transcribed data to record meetings, DND Games and possible provide a way for deaf players to participate 
+Scribe Bot is a discord bot designed to transcribe the audio conversation of discord users in a given channel. The goal is to use the transcribed data to record meetings, DND Games and possible provide a way for deaf players to participate remotely. It is also the goal to read the stream of text and trigger context appropriate events if other bots are present. 
 
 ## Tech
 * Maven

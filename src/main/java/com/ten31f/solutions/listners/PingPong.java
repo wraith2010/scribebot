@@ -26,9 +26,12 @@ public class PingPong extends ListenerAdapter {
 
 	private void ping(MessageReceivedEvent messageReceivedEvent) {
 
-		LOGGER.info(String.format("[%s][%s] %s: %s\n", messageReceivedEvent.getGuild().getName(),
-				messageReceivedEvent.getTextChannel().getName(), messageReceivedEvent.getMember().getEffectiveName(),
-				messageReceivedEvent.getMessage().getContentDisplay()));
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info(String.format("[%s][%s] %s: %s%n", messageReceivedEvent.getGuild().getName(),
+					messageReceivedEvent.getTextChannel().getName(),
+					messageReceivedEvent.getMember().getEffectiveName(),
+					messageReceivedEvent.getMessage().getContentDisplay()));
+		}
 
 		MessageChannel messageChannel = messageReceivedEvent.getChannel();
 

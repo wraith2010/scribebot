@@ -52,40 +52,6 @@ public class Transcriber implements AudioReceiveHandler {
 		}
 	}
 
-//	@Override
-//	public boolean canProvide() {
-//
-//		if (getSpeachBurstQueue().isEmpty()) {
-//			return false;
-//		}
-//
-//		return getSpeachBurstQueue().peek().isClosed();
-//	}
-
-//	@Override
-//	public ByteBuffer provide20MsAudio() {
-//
-//		try {
-//			SpeachBurstToText.sampleRecognize(getSpeachBurstQueue().peek());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		byte[] data = getSpeachBurstQueue().peek().poll();
-//		if (data == null) {
-//			getSpeachBurstQueue().remove();
-//		}
-//
-//		return data == null ? null : ByteBuffer.wrap(data);
-//
-//	}
-
-//	@Override
-//	public boolean isOpus() {
-//		// since we send audio that is received from discord we don't have opus but PCM
-//		return false;
-//	}
-
 	private void setSpeachMap(Map<String, SpeachBurst> speachMap) {
 		this.speachMap = speachMap;
 	}

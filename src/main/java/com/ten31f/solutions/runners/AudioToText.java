@@ -43,8 +43,9 @@ public class AudioToText implements Runnable {
 			}
 		}
 
-		LOGGER.info(String.format("Speech burst waited %sms to be sent for recognition",
-				System.currentTimeMillis() - getSpeachBurst().getLastTime()));
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info(String.format("Speech burst waited %sms to be sent for recognition",
+					System.currentTimeMillis() - getSpeachBurst().getLastTime()));
 
 		try (SpeechClient speechClient = SpeechClient.create()) {
 
