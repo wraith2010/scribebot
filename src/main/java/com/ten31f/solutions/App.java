@@ -45,7 +45,7 @@ public class App extends ListenerAdapter {
 
 	public static void validate(String[] args) {
 
-		if (args.length != 1) {
+		if (args.length < 1) {
 			LOGGER.error("Unable to start without discord token and google key!");
 			System.exit(1);
 		}

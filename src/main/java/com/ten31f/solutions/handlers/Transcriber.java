@@ -20,6 +20,8 @@ public class Transcriber implements AudioReceiveHandler {
 
 	private MessageChannel messageChannel = null;
 
+	private boolean showTimes = false;
+
 	public Transcriber(ExecutorService executorService) {
 		setExecutorService(executorService);
 		setSpeachMap(new HashMap<>());
@@ -47,7 +49,7 @@ public class Transcriber implements AudioReceiveHandler {
 
 		if (speachBurst == null) {
 			speachBurst = new SpeachBurst(userName, userAudio.getAudioData(1.0f));
-			getExecutorService().execute(new AudioToText(speachBurst, getMessageChannel()));
+			getExecutorService().execute(new AudioToText(speachBurst, getMessageChannel(), isShowTimes()));
 			getSpeachMap().put(userName, speachBurst);
 		}
 	}
@@ -74,5 +76,13 @@ public class Transcriber implements AudioReceiveHandler {
 
 	public void setMessageChannel(MessageChannel messageChannel) {
 		this.messageChannel = messageChannel;
+	}
+
+	public boolean isShowTimes() {
+		return showTimes;
+	}
+
+	public void setShowTimes(boolean showTimes) {
+		this.showTimes = showTimes;
 	}
 }

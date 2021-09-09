@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class TranscriberCommand extends ListenerAdapter {
 
 	private static final String COMMAND_SCRIBE = "!scribe";
+	private static final String COMMAND_SCRIBE_DEBUG = "!scribe-debug";
 	private static final String COMMAND_IGNORE = "!ignore";
 
 	private Transcriber transcriber = null;
@@ -35,15 +36,20 @@ public class TranscriberCommand extends ListenerAdapter {
 		if (author.isBot())
 			return;
 
-		if (content.startsWith(COMMAND_SCRIBE)) {
-			onEchoCommand(event);
-		} else if (content.startsWith(COMMAND_IGNORE)) {
-			onSilenceCommand(event);
+		switch (content.trim()) {
+		case COMMAND_SCRIBE:
+		case COMMAND_SCRIBE_DEBUG:
+			onScribeCommand(event, content.trim());
+			break;
+		case COMMAND_IGNORE:
+			onIgnoreCommand(event);
+			break;
+		default:
 		}
 
 	}
 
-	private void onSilenceCommand(GuildMessageReceivedEvent guildMessageReceivedEvent) {
+	private void onIgnoreCommand(GuildMessageReceivedEvent guildMessageReceivedEvent) {
 		Member member = guildMessageReceivedEvent.getMember();
 		GuildVoiceState voiceState = member.getVoiceState();
 		VoiceChannel channel = voiceState.getChannel();
@@ -57,7 +63,7 @@ public class TranscriberCommand extends ListenerAdapter {
 	 *
 	 * @param event The event for this command
 	 */
-	private void onEchoCommand(GuildMessageReceivedEvent event) {
+	private void onScribeCommand(GuildMessageReceivedEvent event, String content) {
 		//
 		Member member = event.getMember();
 		GuildVoiceState voiceState = member.getVoiceState();
@@ -66,6 +72,7 @@ public class TranscriberCommand extends ListenerAdapter {
 			connectTo(channel); // Join the channel of the user
 			onConnecting(channel, event.getChannel()); // Tell the user about our success
 			getTranscriber().setMessageChannel(event.getChannel());
+			getTranscriber().setShowTimes(COMMAND_SCRIBE_DEBUG.equals(content));
 		} else {
 			onUnknownChannel(event.getChannel(), "your voice channel"); // Tell the user about our failure
 		}

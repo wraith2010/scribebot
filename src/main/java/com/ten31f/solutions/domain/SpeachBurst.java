@@ -3,6 +3,8 @@ package com.ten31f.solutions.domain;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -14,13 +16,12 @@ import javax.sound.sampled.AudioSystem;
 public class SpeachBurst {
 
 	// how long before burst closes
-	private static final long OPEN_TIME = 1000l;
+	private static final long OPEN_TIME = 500l;
 
 	private String userName = null;
-
 	private long lastTime = -1;
-
 	private Queue<byte[]> queue = null;
+	private List<Event> events = null;
 
 	public SpeachBurst(String userName, byte[] audioSnippet) {
 		setUserName(userName);
@@ -28,6 +29,7 @@ public class SpeachBurst {
 
 		getQueue().add(audioSnippet);
 		setLastTime(System.currentTimeMillis());
+		addEvent("First Audio Captrued");
 	}
 
 	public boolean isClosed() {
@@ -86,6 +88,30 @@ public class SpeachBurst {
 
 	private void setQueue(Queue<byte[]> queue) {
 		this.queue = queue;
+	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+
+	public void addEvent(String eventText) {
+		if (getEvents() == null) {
+			setEvents(new ArrayList<>());
+		}
+
+		getEvents().add(new Event(eventText));
+	}
+
+	public void addEvent(long millis, String eventText) {
+		if (getEvents() == null) {
+			setEvents(new ArrayList<>());
+		}
+
+		getEvents().add(new Event(millis, eventText));
 	}
 
 }

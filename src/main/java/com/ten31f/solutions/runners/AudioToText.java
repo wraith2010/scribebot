@@ -27,9 +27,17 @@ public class AudioToText implements Runnable {
 
 	private MessageChannel messageChannel = null;
 
+	private boolean showTimes = false;
+
 	public AudioToText(SpeachBurst speachBurst, MessageChannel messageChannel) {
 		setSpeachBurst(speachBurst);
 		setMessageChannel(messageChannel);
+	}
+
+	public AudioToText(SpeachBurst speachBurst, MessageChannel messageChannel, boolean showTimes) {
+		setSpeachBurst(speachBurst);
+		setMessageChannel(messageChannel);
+		setShowTimes(showTimes);
 	}
 
 	@Override
@@ -37,21 +45,20 @@ public class AudioToText implements Runnable {
 
 		while (!getSpeachBurst().isClosed()) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(50);
 			} catch (InterruptedException interruptedException) {
 
 			}
 		}
 
-		if (LOGGER.isInfoEnabled())
-			LOGGER.info(String.format("Speech burst waited %sms to be sent for recognition",
-					System.currentTimeMillis() - getSpeachBurst().getLastTime()));
+		getSpeachBurst().addEvent(getSpeachBurst().getLastTime(), "last audio captured");
+		getSpeachBurst().addEvent("Going out for transcription");
 
 		try (SpeechClient speechClient = SpeechClient.create()) {
 
 			RecognitionConfig config = RecognitionConfig.newBuilder().setLanguageCode(LANGUAGE_CODE)
 					.setSampleRateHertz(SAMPLE_RATE_HERTZ).setAudioChannelCount(CHANNEL_COUNT)
-					.setEncoding(RecognitionConfig.AudioEncoding.LINEAR16).build();
+					.setEncoding(RecognitionConfig.AudioEncoding.LINEAR16).setEnableAutomaticPunctuation(true).build();
 
 			RecognitionAudio audio = RecognitionAudio.newBuilder()
 					.setContent(ByteString.copyFrom(getSpeachBurst().getAudioAsWave())).build();
@@ -62,10 +69,24 @@ public class AudioToText implements Runnable {
 				// First alternative is the most probable result
 				SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
 
-				getMessageChannel()
-						.sendMessage(
-								String.format("%s: %s", getSpeachBurst().getUserName(), alternative.getTranscript()))
-						.queue();
+				getSpeachBurst().addEvent("Reporting transcription");
+
+				StringBuilder messageStringBuilder = new StringBuilder();
+
+				messageStringBuilder.append(
+						String.format("**%s**: %s%n", getSpeachBurst().getUserName(), alternative.getTranscript()));
+
+				if (isShowTimes()) {
+					messageStringBuilder.append("```");
+					getSpeachBurst().getEvents().stream().forEach(event -> messageStringBuilder
+							.append(String.format("%s: %s%n", event.getLocalDateTime(), event.getDescription())));
+					messageStringBuilder.append("```");
+				}
+
+				getMessageChannel().sendMessage(messageStringBuilder.toString()).queue();
+
+				if (LOGGER.isInfoEnabled())
+					LOGGER.info(messageStringBuilder.toString());
 			}
 
 		} catch (Exception exception) {
@@ -88,4 +109,13 @@ public class AudioToText implements Runnable {
 	public void setMessageChannel(MessageChannel messageChannel) {
 		this.messageChannel = messageChannel;
 	}
+
+	public boolean isShowTimes() {
+		return showTimes;
+	}
+
+	public void setShowTimes(boolean showTimes) {
+		this.showTimes = showTimes;
+	}
+
 }
