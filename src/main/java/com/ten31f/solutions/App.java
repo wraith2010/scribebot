@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ten31f.solutions.handlers.Transcriber;
-import com.ten31f.solutions.listners.PingPong;
 import com.ten31f.solutions.listners.TranscriberCommand;
 
 import net.dv8tion.jda.api.JDA;
@@ -35,7 +34,7 @@ public class App extends ListenerAdapter {
 
 		jdaBuilder.setActivity(Activity.listening("To the Conversation"));
 
-		jdaBuilder.addEventListeners(new PingPong(), new TranscriberCommand(transcriber));
+		jdaBuilder.addEventListeners(new TranscriberCommand(transcriber));
 
 		JDA jda = jdaBuilder.build();
 

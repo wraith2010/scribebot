@@ -47,7 +47,7 @@ public class AudioToText implements Runnable {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException interruptedException) {
-
+				LOGGER.error(interruptedException);
 			}
 		}
 

@@ -1,7 +1,11 @@
 package com.ten31f.solutions.listners;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.ten31f.solutions.handlers.Transcriber;
 
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -16,9 +20,12 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class TranscriberCommand extends ListenerAdapter {
 
+	private static final Logger LOGGER = LogManager.getLogger(TranscriberCommand.class);
+
 	private static final String COMMAND_SCRIBE = "!scribe";
 	private static final String COMMAND_SCRIBE_DEBUG = "!scribe-debug";
 	private static final String COMMAND_IGNORE = "!ignore";
+	private static final String COMMAND_PING = "!ping";
 
 	private Transcriber transcriber = null;
 
@@ -43,6 +50,9 @@ public class TranscriberCommand extends ListenerAdapter {
 			break;
 		case COMMAND_IGNORE:
 			onIgnoreCommand(event);
+			break;
+		case COMMAND_PING:
+			onPingCommand(event);
 			break;
 		default:
 		}
@@ -76,6 +86,24 @@ public class TranscriberCommand extends ListenerAdapter {
 		} else {
 			onUnknownChannel(event.getChannel(), "your voice channel"); // Tell the user about our failure
 		}
+	}
+
+	private void onPingCommand(GuildMessageReceivedEvent event) {
+
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info(String.format("[%s][%s] %s: %s%n", event.getGuild().getName(), event.getChannel().getName(),
+					event.getMember().getEffectiveName(), event.getMessage().getContentDisplay()));
+		}
+
+		MessageChannel messageChannel = event.getChannel();
+
+		MessageBuilder messageBuilder = new MessageBuilder();
+		messageBuilder.append("Pong!");
+		Message message = messageBuilder.build();
+
+		long time = System.currentTimeMillis();
+		messageChannel.sendMessage(message).queue(
+				response -> response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue());
 	}
 
 	/**
