@@ -1,8 +1,5 @@
 package com.ten31f.solutions.runners;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.cloud.speech.v1.RecognitionAudio;
 import com.google.cloud.speech.v1.RecognitionConfig;
 import com.google.cloud.speech.v1.RecognizeRequest;
@@ -13,11 +10,17 @@ import com.google.cloud.speech.v1.SpeechRecognitionResult;
 import com.google.protobuf.ByteString;
 import com.ten31f.solutions.domain.SpeachBurst;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
+@AllArgsConstructor
+@Slf4j
+@Getter
+@Setter
 public class AudioToText implements Runnable {
-
-	private static final Logger LOGGER = LogManager.getLogger(AudioToText.class);
 
 	private static final int SAMPLE_RATE_HERTZ = 48000;
 	private static final int CHANNEL_COUNT = 2;
@@ -34,12 +37,6 @@ public class AudioToText implements Runnable {
 		setMessageChannel(messageChannel);
 	}
 
-	public AudioToText(SpeachBurst speachBurst, MessageChannel messageChannel, boolean showTimes) {
-		setSpeachBurst(speachBurst);
-		setMessageChannel(messageChannel);
-		setShowTimes(showTimes);
-	}
-
 	@Override
 	public void run() {
 
@@ -47,7 +44,7 @@ public class AudioToText implements Runnable {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException interruptedException) {
-				LOGGER.error(interruptedException);
+				log.error("Speech burst waiting intruppted", interruptedException);
 			}
 		}
 
@@ -85,37 +82,13 @@ public class AudioToText implements Runnable {
 
 				getMessageChannel().sendMessage(messageStringBuilder.toString()).queue();
 
-				if (LOGGER.isInfoEnabled())
-					LOGGER.info(messageStringBuilder.toString());
+				if (log.isInfoEnabled())
+					log.info(messageStringBuilder.toString());
 			}
 
 		} catch (Exception exception) {
-			LOGGER.error(String.format("Failed to create the client due to: %s", exception), exception);
+			log.error(String.format("Failed to create the client due to: %s", exception), exception);
 		}
-	}
-
-	public SpeachBurst getSpeachBurst() {
-		return speachBurst;
-	}
-
-	public void setSpeachBurst(SpeachBurst speachBurst) {
-		this.speachBurst = speachBurst;
-	}
-
-	public MessageChannel getMessageChannel() {
-		return messageChannel;
-	}
-
-	public void setMessageChannel(MessageChannel messageChannel) {
-		this.messageChannel = messageChannel;
-	}
-
-	public boolean isShowTimes() {
-		return showTimes;
-	}
-
-	public void setShowTimes(boolean showTimes) {
-		this.showTimes = showTimes;
 	}
 
 }

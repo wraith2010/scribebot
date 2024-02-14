@@ -1,10 +1,10 @@
 package com.ten31f.solutions.listners;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.ten31f.solutions.handlers.Transcriber;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -18,9 +18,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+@Slf4j
+@Getter
+@Setter
 public class TranscriberCommand extends ListenerAdapter {
-
-	private static final Logger LOGGER = LogManager.getLogger(TranscriberCommand.class);
 
 	private static final String COMMAND_SCRIBE = "!scribe";
 	private static final String COMMAND_SCRIBE_DEBUG = "!scribe-debug";
@@ -90,8 +91,8 @@ public class TranscriberCommand extends ListenerAdapter {
 
 	private void onPingCommand(GuildMessageReceivedEvent event) {
 
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info(String.format("[%s][%s] %s: %s%n", event.getGuild().getName(), event.getChannel().getName(),
+		if (log.isInfoEnabled()) {
+			log.info(String.format("[%s][%s] %s: %s%n", event.getGuild().getName(), event.getChannel().getName(),
 					event.getMember().getEffectiveName(), event.getMessage().getContentDisplay()));
 		}
 
@@ -156,13 +157,5 @@ public class TranscriberCommand extends ListenerAdapter {
 		AudioManager audioManager = guild.getAudioManager();
 		// Create our Send/Receive handler for the audio connection
 		audioManager.closeAudioConnection();
-	}
-
-	public Transcriber getTranscriber() {
-		return transcriber;
-	}
-
-	public void setTranscriber(Transcriber transcriber) {
-		this.transcriber = transcriber;
 	}
 }

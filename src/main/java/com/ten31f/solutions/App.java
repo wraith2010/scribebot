@@ -5,21 +5,18 @@ import java.util.concurrent.Executors;
 
 import javax.security.auth.login.LoginException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.ten31f.solutions.handlers.Transcriber;
 import com.ten31f.solutions.listners.TranscriberCommand;
 
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
+@Slf4j
 public class App extends ListenerAdapter {
-
-	private static final Logger LOGGER = LogManager.getLogger(App.class);
 
 	public static void main(String[] args) throws LoginException, InterruptedException {
 
@@ -45,7 +42,7 @@ public class App extends ListenerAdapter {
 	public static void validate(String[] args) {
 
 		if (args.length < 1) {
-			LOGGER.error("Unable to start without discord token and google key!");
+			log.error("Unable to start without discord token and google key!");
 			System.exit(1);
 		}
 

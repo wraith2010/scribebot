@@ -1,6 +1,8 @@
 package com.ten31f.solutions.handlers;
 
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -16,9 +18,10 @@ import net.dv8tion.jda.api.entities.User;
 
 @Getter
 @Setter
-public class Transcriber implements AudioReceiveHandler {
+public class QueuedTranscriber implements AudioReceiveHandler {
 
 	private Map<String, SpeachBurst> speachMap = null;
+	private Deque<SpeachBurst> speachDeque = null;
 
 	private ExecutorService executorService = null;
 
@@ -26,9 +29,9 @@ public class Transcriber implements AudioReceiveHandler {
 
 	private boolean showTimes = false;
 
-	public Transcriber(ExecutorService executorService) {
-		setExecutorService(executorService);
+	public QueuedTranscriber() {
 		setSpeachMap(new HashMap<>());
+		setSpeachDeque(new LinkedList<>());
 	}
 
 	@Override
@@ -57,4 +60,5 @@ public class Transcriber implements AudioReceiveHandler {
 			getSpeachMap().put(userName, speachBurst);
 		}
 	}
+
 }

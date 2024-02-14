@@ -13,6 +13,11 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SpeachBurst {
 
 	// how long before burst closes
@@ -64,38 +69,6 @@ public class SpeachBurst {
 		AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(decodedData), format, decodedData.length),
 				AudioFileFormat.Type.WAVE, waveByteArrayOutputStream);
 		return waveByteArrayOutputStream.toByteArray();
-	}
-
-	private void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public long getLastTime() {
-		return lastTime;
-	}
-
-	private void setLastTime(long lastTime) {
-		this.lastTime = lastTime;
-	}
-
-	public Queue<byte[]> getQueue() {
-		return queue;
-	}
-
-	private void setQueue(Queue<byte[]> queue) {
-		this.queue = queue;
-	}
-
-	public List<Event> getEvents() {
-		return events;
-	}
-
-	public void setEvents(List<Event> events) {
-		this.events = events;
 	}
 
 	public void addEvent(String eventText) {

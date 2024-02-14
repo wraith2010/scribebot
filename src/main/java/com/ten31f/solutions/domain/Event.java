@@ -4,6 +4,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Event {
 
 	private String description;
@@ -20,19 +25,4 @@ public class Event {
 		setLocalDateTime(instant.atZone(ZoneId.systemDefault()).toLocalDateTime());
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	private void setDescription(String description) {
-		this.description = description;
-	}
-
-	public LocalDateTime getLocalDateTime() {
-		return localDateTime;
-	}
-
-	private void setLocalDateTime(LocalDateTime localDateTime) {
-		this.localDateTime = localDateTime;
-	}
 }
