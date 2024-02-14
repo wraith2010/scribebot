@@ -8,3 +8,6 @@ Scribe Bot is a discord bot designed to transcribe the audio conversation of dis
 * Maven
 * JDA (Java Discord API)
 * Cloud Speech-to-Text API
+
+## Google API key required
+This service uses a google api to translate speech to text.  An api key is required and is looked for as a environmental value.
